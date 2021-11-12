@@ -12,12 +12,9 @@ public class CsvReader {
     public static List<User> readUsers(String fileName){
         List<User> users = new ArrayList<>();
 
-
         try{
             BufferedReader csvReader = new BufferedReader(new FileReader(fileName));
             String line;
-
-            csvReader.readLine();
 
             while ((line = csvReader.readLine()) != null){
                 String[] data = line.split(";");

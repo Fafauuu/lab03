@@ -6,12 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Event {
-    private final String eventName;
     private final User organizer;
     private List<User> participants;
     private List<User> animators;
-    private EventsState eventsState;
+    private List<User> candidates;
+    private String eventName;
     private EventDescription eventDescription;
+    private EventsState eventsState;
     private EventEquipmentList eventEquipmentList;
     private List<String> comments;
 
@@ -20,11 +21,8 @@ public class Event {
         this.organizer = organizer;
         participants = new ArrayList<>();
         animators = new ArrayList<>();
+        candidates = new ArrayList<>();
         comments = new ArrayList<>();
-    }
-
-    public String getEventName() {
-        return eventName;
     }
 
     public User getOrganizer() {
@@ -43,16 +41,34 @@ public class Event {
         return animators;
     }
 
+    public void addAnimator(User designatedAnimator){
+        animators.add(designatedAnimator);
+        participants.remove(designatedAnimator);
+    }
+
     public void setAnimators(List<User> animators) {
         this.animators = animators;
     }
 
-    public EventsState getEventsState() {
-        return eventsState;
+    public List<User> getCandidates() {
+        return candidates;
     }
 
-    public void setEventsState(EventsState eventsState) {
-        this.eventsState = eventsState;
+    public void acceptCandidate(User candidate){
+        participants.add(candidate);
+        candidates.remove(candidate);
+    }
+
+    public void setCandidates(List<User> candidates) {
+        this.candidates = candidates;
+    }
+
+    public String getEventName() {
+        return eventName;
+    }
+
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
     }
 
     public EventDescription getEventDescription() {
@@ -63,6 +79,14 @@ public class Event {
         this.eventDescription = eventDescription;
     }
 
+    public EventsState getEventsState() {
+        return eventsState;
+    }
+
+    public void setEventsState(EventsState eventsState) {
+        this.eventsState = eventsState;
+    }
+
     public EventEquipmentList getEventEquipmentList() {
         return eventEquipmentList;
     }
@@ -71,21 +95,12 @@ public class Event {
         this.eventEquipmentList = eventEquipmentList;
     }
 
-    public double getPreparationPercentage() {
-        return 0;
-    }
-
     public List<String> getComments() {
         return comments;
     }
 
     public void setComments(List<String> comments) {
         this.comments = comments;
-    }
-
-    public String closeEvent(){
-        String summary = "";
-        return summary;
     }
 
     @Override

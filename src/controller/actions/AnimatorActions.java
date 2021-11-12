@@ -41,7 +41,7 @@ public class AnimatorActions {
 
     private void menu() {
         try {
-            int action = animatorMenu();
+            int action = animatorGui.animatorMenu(event);
             switch (action) {
                 case 1:
                     createEventEquipmentList();
@@ -61,10 +61,6 @@ public class AnimatorActions {
         } catch (InvalidActionException e) {
             menu();
         }
-    }
-
-    private int animatorMenu() {
-        return animatorGui.animatorMenu(event);
     }
 
     private void createEventEquipmentList() {

@@ -43,7 +43,7 @@ public class ParticipantActions {
 
     private void menu() {
         try {
-            int action = participantMenu();
+            int action = participantGui.participantMenu(event);
             switch (action) {
                 case 1:
                     reviewEventList();
@@ -69,10 +69,6 @@ public class ParticipantActions {
         } catch (InvalidActionException e) {
             menu();
         }
-    }
-
-    private int participantMenu() {
-        return participantGui.participantMenu(event);
     }
 
     public void reviewEventList() {

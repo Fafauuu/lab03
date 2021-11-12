@@ -20,19 +20,27 @@ public class Main {
 
         Event event1 = new Event("Ognisko", usersDataBase.getUsersList().get(0));
         Event event2 = new Event("Piknik", usersDataBase.getUsersList().get(1));
-        Event event3 = new Event("Wedrowka", usersDataBase.getUsersList().get(2));
         List<User> animatorsList = new ArrayList<>();
+        List<User> participantList = new ArrayList<>();
+        List<User> candidateList = new ArrayList<>();
+        animatorsList.add(usersDataBase.getUsersList().get(2));
         animatorsList.add(usersDataBase.getUsersList().get(3));
-        animatorsList.add(usersDataBase.getUsersList().get(4));
-        animatorsList.add(usersDataBase.getUsersList().get(5));
+        participantList.add(usersDataBase.getUsersList().get(4));
+        participantList.add(usersDataBase.getUsersList().get(5));
+        participantList.add(usersDataBase.getUsersList().get(6));
+        candidateList.add(usersDataBase.getUsersList().get(7));
+        candidateList.add(usersDataBase.getUsersList().get(8));
+        candidateList.add(usersDataBase.getUsersList().get(9));
         event1.setAnimators(animatorsList);
         event2.setAnimators(animatorsList);
-        event3.setAnimators(animatorsList);
+        event1.setParticipants(participantList);
+        event2.setParticipants(participantList);
+        event1.setCandidates(candidateList);
+        event2.setCandidates(candidateList);
 
         try {
             eventsDataBase.addEvent(event1);
             eventsDataBase.addEvent(event2);
-            eventsDataBase.addEvent(event3);
         } catch (EventAlreadyExists e) {
             e.printStackTrace();
         }

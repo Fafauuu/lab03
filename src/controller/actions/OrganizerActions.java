@@ -29,9 +29,8 @@ public class OrganizerActions {
     }
 
     private void menu() {
-        int action;
         try {
-            action = organizerMenu();
+            int action = organizerGui.organizerMenu();
             switch (action) {
                 case 1:
                     reviewEventList();
@@ -56,18 +55,88 @@ public class OrganizerActions {
         }
     }
 
-    private int organizerMenu() {
-        return organizerGui.organizerMenu(event);
-    }
-
     public void reviewEventList() {
+        System.out.println(eventsDataBase.getEventList());
+        menu();
     }
 
-    public void editEvent() {
-
+    private void editEvent() {
+        try {
+            int action = organizerGui.editEvent();
+            switch (action) {
+                case 1:
+                    event.setEventName(organizerGui.changeEventName());
+                    editEvent();
+                    break;
+                case 2:
+                    event.getEventDescription().setDescription(organizerGui.changeEventDescription());
+                    editEvent();
+                    break;
+                case 3:
+                    event.getEventDescription().setEventDate(organizerGui.changeEventDate());
+                    editEvent();
+                    break;
+                case 4:
+                    event.getEventDescription().setApplicationsDeadline(organizerGui.changeApplicationDeadline());
+                    editEvent();
+                    break;
+                case 5:
+                    menu();
+                    break;
+                case 6:
+                    System.exit(0);
+                default:
+                    throw new InvalidActionException("Invalid action chosen");
+            }
+        } catch (InvalidActionException e) {
+            reviewEventList();
+        }
     }
 
-    public void reviewParticipants() {
-
+    private void reviewParticipants() {
+        try {
+            int action = organizerGui.reviewParticipants();
+            switch (action) {
+                case 1:
+                    if (!event.getCandidates().isEmpty()){
+                        int input = organizerGui.reviewCandidates(event.getCandidates());
+                        if (input == event.getCandidates().size() + 1){
+                            reviewParticipants();
+                            break;
+                        }
+                        int acceptedCandidateIndex = input - 1;
+                        User acceptedCandidate = event.getCandidates().get(acceptedCandidateIndex);
+                        event.acceptCandidate(acceptedCandidate);
+                    } else {
+                        System.out.println("No candidates available");
+                    }
+                    reviewParticipants();
+                    break;
+                case 2:
+                    if (!event.getParticipants().isEmpty()){
+                        int input = organizerGui.designateAnimators(event.getParticipants());
+                        if (input == event.getParticipants().size() + 1){
+                            reviewParticipants();
+                            break;
+                        }
+                        int designatedAnimatorIndex = input - 1;
+                        User designatedAnimator = event.getParticipants().get(designatedAnimatorIndex);
+                        event.addAnimator(designatedAnimator);
+                    } else {
+                        System.out.println("No participants available");
+                    }
+                    reviewParticipants();
+                    break;
+                case 3:
+                    menu();
+                    break;
+                case 4:
+                    System.exit(0);
+                default:
+                    throw new InvalidActionException("Invalid action chosen");
+            }
+        } catch (InvalidActionException e) {
+            reviewEventList();
+        }
     }
 }
