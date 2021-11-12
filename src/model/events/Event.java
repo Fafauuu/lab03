@@ -1,8 +1,5 @@
 package model.events;
 
-import model.users.Animator;
-import model.users.Organizer;
-import model.users.Participant;
 import model.users.User;
 
 import java.util.ArrayList;
@@ -10,9 +7,9 @@ import java.util.List;
 
 public class Event {
     private final String eventName;
-    private final Organizer organizer;
-    private List<Participant> participants;
-    private List<Animator> animators;
+    private final User organizer;
+    private List<User> participants;
+    private List<User> animators;
     private EventsState eventsState;
     private EventDescription eventDescription;
     private EventEquipmentList eventEquipmentList;
@@ -20,7 +17,7 @@ public class Event {
 
     public Event(String eventName, User organizer) {
         this.eventName = eventName;
-        this.organizer = new Organizer(organizer);
+        this.organizer = organizer;
         participants = new ArrayList<>();
         animators = new ArrayList<>();
         comments = new ArrayList<>();
@@ -30,23 +27,23 @@ public class Event {
         return eventName;
     }
 
-    public Organizer getOrganizer() {
+    public User getOrganizer() {
         return organizer;
     }
 
-    public List<Participant> getParticipants() {
+    public List<User> getParticipants() {
         return participants;
     }
 
-    public void setParticipants(List<Participant> participants) {
+    public void setParticipants(List<User> participants) {
         this.participants = participants;
     }
 
-    public List<Animator> getAnimators() {
+    public List<User> getAnimators() {
         return animators;
     }
 
-    public void setAnimators(List<Animator> animators) {
+    public void setAnimators(List<User> animators) {
         this.animators = animators;
     }
 

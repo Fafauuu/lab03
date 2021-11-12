@@ -25,4 +25,5 @@ public class User extends Person{
     public String getSurname() {
         return surname;
     }
+
 }
