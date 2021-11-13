@@ -23,6 +23,9 @@ public class Event {
         animators = new ArrayList<>();
         candidates = new ArrayList<>();
         comments = new ArrayList<>();
+        eventDescription = new EventDescription();
+        eventEquipmentList = new EventEquipmentList();
+        comments = new ArrayList<>();
     }
 
     public User getOrganizer() {
@@ -52,6 +55,10 @@ public class Event {
 
     public List<User> getCandidates() {
         return candidates;
+    }
+
+    public void addCandidate(User candidate){
+        candidates.add(candidate);
     }
 
     public void acceptCandidate(User candidate){
@@ -105,11 +112,13 @@ public class Event {
 
     @Override
     public String toString() {
-        return "Event{" +
-                "eventName='" + eventName + '\'' +
-                ", organizer=" + organizer +
-                ", participants=" + participants +
-                ", animators=" + animators +
-                '}';
+        return "Organizer - " + organizer
+                + "\nParticipants: " + participants
+                + "\nAnimators: " + animators
+                + "\nDescription: " + eventDescription.getDescription()
+                + "\nDate: " + eventDescription.getEventDate()
+                + "\nApplication deadline: " + eventDescription.getApplicationsDeadline()
+                + "\nComments: " + comments
+                + "\n";
     }
 }

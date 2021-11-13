@@ -4,6 +4,9 @@ import dataBase.EventsDataBase;
 import model.events.Event;
 import model.users.User;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class ParticipantGuiImpl implements ParticipantGui{
@@ -18,12 +21,12 @@ public class ParticipantGuiImpl implements ParticipantGui{
         Scanner scanner = new Scanner(System.in);
         int chosenEventIndex = scanner.nextInt();
 
-        Event event = null;
+        Event event;
         try {
             event = eventsDataBase.getEventList().get(chosenEventIndex-1);
         }catch (Exception e){
-            System.out.println("Invalid event");
-            chooseEvent(eventsDataBase);
+            System.out.println("Invalid event\n");
+            event = chooseEvent(eventsDataBase);
         }
         return event;
     }
@@ -60,5 +63,55 @@ public class ParticipantGuiImpl implements ParticipantGui{
         System.out.println("6 - Exit");
         Scanner scanner = new Scanner(System.in);
         return scanner.nextInt();
+    }
+
+    @Override
+    public void reviewEventList(EventsDataBase eventsDataBase) {
+        System.out.println("\nEVENT LIST");
+        int eventIndex = 1;
+        for (Event event : eventsDataBase.getEventList()) {
+            System.out.println(eventIndex + " - " + event.getEventName());
+            eventIndex++;
+            System.out.println(event);
+        }
+    }
+
+    @Override
+    public int reportDesireToParticipate(EventsDataBase eventsDataBase) {
+        System.out.println("\nEVENT LIST");
+        int eventIndex = 1;
+        for (Event event : eventsDataBase.getEventList()) {
+            System.out.println(eventIndex + " - " + event.getEventName());
+            eventIndex++;
+        }
+        System.out.println(eventIndex + " - GO BACK");
+        System.out.println("\n Choose event to participate");
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextInt();
+    }
+
+    @Override
+    public void reviewEquipmentList(Event event) {
+        System.out.println("\nEQUIPMENT DEMANDS");
+        int index = 1;
+        Map<String, Integer> demands = event.getEventEquipmentList().getEquipmentDemand();
+        for (String equipmentDemanded : demands.keySet()) {
+            System.out.println(index + " - " + equipmentDemanded + " amount: " + demands.get(equipmentDemanded));
+            index++;
+        }
+        System.out.println();
+    }
+
+    @Override
+    public List<String> reportEquipmentDeliveryProposition(User participant) {
+        List<String> data = new ArrayList<>();
+        System.out.println("REPORT EQUIPMENT DELIVERY PROPOSITION");
+        data.add(participant.getName());
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Equipment name: ");
+        data.add(scanner.nextLine());
+        System.out.print("Amount");
+        data.add(scanner.nextLine());
+        return data;
     }
 }

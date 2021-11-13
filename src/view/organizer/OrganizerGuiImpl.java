@@ -4,7 +4,7 @@ import dataBase.EventsDataBase;
 import model.events.Event;
 import model.users.User;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -22,12 +22,12 @@ public class OrganizerGuiImpl implements OrganizerGui{
         Scanner scanner = new Scanner(System.in);
         int chosenEventIndex = scanner.nextInt();
 
-        Event event = null;
+        Event event;
         try {
             event = eventsDataBase.getEventList().get(chosenEventIndex-1);
         }catch (Exception e){
-            System.out.println("Invalid event");
-            chooseEvent(eventsDataBase);
+            System.out.println("Invalid event\n");
+            event = chooseEvent(eventsDataBase);
         }
         return event;
     }
@@ -36,13 +36,42 @@ public class OrganizerGuiImpl implements OrganizerGui{
     public int organizerMenu() {
         System.out.println("\nMAIN MENU");
         System.out.println("Choose action:");
-        System.out.println("1 - Review event list");
-        System.out.println("2 - Edit event");
-        System.out.println("3 - Review participants");
-        System.out.println("4 - Choose different organizer");
-        System.out.println("5 - EXIT");
+        System.out.println("1 - Create new event");
+        System.out.println("2 - Review event list");
+        System.out.println("3 - Edit event");
+        System.out.println("4 - Review participants");
+        System.out.println("5 - Choose different organizer");
+        System.out.println("6 - EXIT");
         Scanner scanner = new Scanner(System.in);
         return scanner.nextInt();
+    }
+
+    @Override
+    public List<String> createNewEvent() {
+        List<String> data = new ArrayList<>();
+        System.out.println("CREATE NEW EVENT");
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Name: ");
+        data.add(scanner.nextLine());
+        System.out.print("\nDescription: ");
+        data.add(scanner.nextLine());
+        System.out.print("\nDate (y-m-d):");
+        data.add(scanner.nextLine());
+        System.out.print("\nApplication (y-m-d):");
+        data.add(scanner.nextLine());
+        System.out.println();
+        return data;
+    }
+
+    @Override
+    public void reviewEventList(EventsDataBase eventsDataBase) {
+        System.out.println("\nEVENT LIST");
+        int eventIndex = 1;
+        for (Event event : eventsDataBase.getEventList()) {
+            System.out.println(eventIndex + " " + event.getEventName());
+            eventIndex++;
+            System.out.println(event);
+        }
     }
 
     @Override
@@ -73,13 +102,17 @@ public class OrganizerGuiImpl implements OrganizerGui{
     }
 
     @Override
-    public Date changeEventDate() {
-        return null;
+    public String changeEventDate() {
+        System.out.println("\nEnter new event date (y-m-d):");
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextLine();
     }
 
     @Override
-    public Date changeApplicationDeadline() {
-        return null;
+    public String changeApplicationDeadline() {
+        System.out.println("\nEnter new application deadline (y-m-d):");
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextLine();
     }
 
     @Override

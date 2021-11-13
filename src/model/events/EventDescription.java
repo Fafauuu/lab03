@@ -1,11 +1,11 @@
 package model.events;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class EventDescription {
     private String description;
-    private Date eventDate;
-    private Date applicationsDeadline;
+    private LocalDate eventDate;
+    private LocalDate applicationsDeadline;
 
     public String getDescription() {
         return description;
@@ -15,19 +15,19 @@ public class EventDescription {
         this.description = description;
     }
 
-    public Date getEventDate() {
+    public LocalDate getEventDate() {
         return eventDate;
     }
 
-    public void setEventDate(Date eventDate) {
+    public void setEventDate(LocalDate eventDate) {
         this.eventDate = eventDate;
     }
 
-    public Date getApplicationsDeadline() {
+    public LocalDate getApplicationsDeadline() {
         return applicationsDeadline;
     }
 
-    public void setApplicationsDeadline(Date applicationsDeadline) {
+    public void setApplicationsDeadline(LocalDate applicationsDeadline) {
         this.applicationsDeadline = applicationsDeadline;
     }
 }

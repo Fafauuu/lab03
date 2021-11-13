@@ -7,6 +7,8 @@ import model.users.User;
 import view.animator.AnimatorGui;
 import view.animator.AnimatorGuiImpl;
 
+import java.util.List;
+
 public class AnimatorActions {
     private final EventsDataBase eventsDataBase;
     private Event event;
@@ -29,7 +31,7 @@ public class AnimatorActions {
         try {
             event = animatorGui.chooseEvent(eventsDataBase);
         }catch (NullPointerException e){
-            System.out.println("Invalid event");
+            System.out.println("Invalid event\n");
             chooseEvent();
         }
         return event;
@@ -44,15 +46,18 @@ public class AnimatorActions {
             int action = animatorGui.animatorMenu(event);
             switch (action) {
                 case 1:
-                    createEventEquipmentList();
+                    addEquipmentDemand();
                     break;
                 case 2:
-                    reviewEventEquipmentDeliveryProposition();
+                    reviewDeliveredEquipment();
                     break;
                 case 3:
-                    startActions();
+                    reviewEventEquipmentDeliveryProposition();
                     break;
                 case 4:
+                    startActions();
+                    break;
+                case 5:
                     System.exit(0);
                     break;
                 default:
@@ -63,15 +68,28 @@ public class AnimatorActions {
         }
     }
 
-    private void createEventEquipmentList() {
+    private void addEquipmentDemand() {
+        List<String> data = animatorGui.addEquipmentDemand();
+        event.getEventEquipmentList().addEquipmentDemand(data.get(0), Integer.parseInt(data.get(1)));
+        menu();
+    }
 
+    private void reviewDeliveredEquipment(){
+        animatorGui.reviewDeliveredEquipment(event);
+        menu();
     }
 
     private void reviewEventEquipmentDeliveryProposition() {
-
-    }
-
-    private void acceptEventEquipmentDeliveryProposition() {
-
+        int input = animatorGui.reviewDeliveryPropositions(event);
+        if (input != 0){
+            List<String> offer = event.getEventEquipmentList().getEquipmentOffers().get(input-1);
+            event.getEventEquipmentList().getEquipmentOffers().remove(offer);
+            for (String equipmentName : event.getEventEquipmentList().getEquipmentDelivery().keySet()) {
+                if (equipmentName.equals(offer.get(1))){
+                    event.getEventEquipmentList().acceptEquipmentOffer(equipmentName, Integer.parseInt(offer.get(2)));
+                }
+            }
+        }
+        menu();
     }
 }
