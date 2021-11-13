@@ -39,9 +39,10 @@ public class OrganizerGuiImpl implements OrganizerGui{
         System.out.println("1 - Create new event");
         System.out.println("2 - Review event list");
         System.out.println("3 - Edit event");
-        System.out.println("4 - Review participants");
-        System.out.println("5 - Choose different organizer");
-        System.out.println("6 - EXIT");
+        System.out.println("4 - Close event");
+        System.out.println("5 - Review participants");
+        System.out.println("6 - Choose different organizer");
+        System.out.println("7 - EXIT");
         Scanner scanner = new Scanner(System.in);
         return scanner.nextInt();
     }
@@ -53,11 +54,11 @@ public class OrganizerGuiImpl implements OrganizerGui{
         Scanner scanner = new Scanner(System.in);
         System.out.print("Name: ");
         data.add(scanner.nextLine());
-        System.out.print("\nDescription: ");
+        System.out.print("Description: ");
         data.add(scanner.nextLine());
-        System.out.print("\nDate (y-m-d):");
+        System.out.print("Date (y-m-d):");
         data.add(scanner.nextLine());
-        System.out.print("\nApplication (y-m-d):");
+        System.out.print("Application (y-m-d):");
         data.add(scanner.nextLine());
         System.out.println();
         return data;
@@ -150,5 +151,21 @@ public class OrganizerGuiImpl implements OrganizerGui{
         System.out.println(index + " - GO BACK");
         Scanner scanner = new Scanner(System.in);
         return scanner.nextInt();
+    }
+
+    @Override
+    public int closeEvent() {
+        System.out.println("\nDo you want to close this event?");
+        System.out.println("1 - yes");
+        System.out.println("2 - no");
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextInt();
+    }
+
+    @Override
+    public String addEventSummary() {
+        System.out.println("\nADD EVENT SUMMARY");
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextLine();
     }
 }

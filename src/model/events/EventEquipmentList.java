@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 public class EventEquipmentList {
-    private Map<String, Integer> equipmentDemand;
-    private Map<String, Integer> equipmentDelivery;
-    private List<List<String>> equipmentOffers;
+    private final Map<String, Integer> equipmentDemand;
+    private final Map<String, Integer> equipmentDelivery;
+    private final List<List<String>> equipmentOffers;
 
     public EventEquipmentList() {
         equipmentDemand = new HashMap<>();

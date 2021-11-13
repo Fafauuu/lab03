@@ -4,6 +4,7 @@ import dataBase.EventsDataBase;
 import exceptions.EventAlreadyExists;
 import exceptions.InvalidActionException;
 import model.events.Event;
+import model.events.EventsStatus;
 import model.users.User;
 import view.organizer.OrganizerGui;
 import view.organizer.OrganizerGuiImpl;
@@ -46,12 +47,15 @@ public class OrganizerActions {
                     editEvent();
                     break;
                 case 4:
-                    reviewParticipants();
+                    closeEvent();
                     break;
                 case 5:
-                    startActions();
+                    reviewParticipants();
                     break;
                 case 6:
+                    startActions();
+                    break;
+                case 7:
                     System.exit(0);
                     break;
                 default:
@@ -88,20 +92,24 @@ public class OrganizerActions {
             switch (action) {
                 case 1:
                     event.setEventName(organizerGui.changeEventName());
+                    event.setEventsStatus(EventsStatus.EDITED);
                     editEvent();
                     break;
                 case 2:
                     event.getEventDescription().setDescription(organizerGui.changeEventDescription());
+                    event.setEventsStatus(EventsStatus.EDITED);
                     editEvent();
                     break;
                 case 3:
                     String date = organizerGui.changeEventDate();
                     event.getEventDescription().setEventDate(LocalDate.parse(date));
+                    event.setEventsStatus(EventsStatus.EDITED);
                     editEvent();
                     break;
                 case 4:
                     String deadline = organizerGui.changeApplicationDeadline();
                     event.getEventDescription().setEventDate(LocalDate.parse(deadline));
+                    event.setEventsStatus(EventsStatus.EDITED);
                     editEvent();
                     break;
                 case 5:
@@ -113,8 +121,32 @@ public class OrganizerActions {
                     throw new InvalidActionException("Invalid action chosen");
             }
         } catch (InvalidActionException e) {
-            reviewEventList();
+            editEvent();
         }
+    }
+
+    private void closeEvent() {
+        try {
+            int action = organizerGui.closeEvent();
+            switch (action) {
+                case 1:
+                    addEventSummary();
+                    event.setEventsStatus(EventsStatus.ENDED);
+                    break;
+                case 2:
+                    mainMenu();
+                    break;
+                default:
+                    throw new InvalidActionException("Invalid action chosen");
+            }
+        } catch (InvalidActionException e) {
+            reviewParticipants();
+        }
+    }
+
+    private void addEventSummary() {
+        String summary = organizerGui.addEventSummary();
+        event.addComment(summary);
     }
 
     private void reviewParticipants() {
@@ -122,34 +154,10 @@ public class OrganizerActions {
             int action = organizerGui.reviewParticipants();
             switch (action) {
                 case 1:
-                    if (!event.getCandidates().isEmpty()) {
-                        int input = organizerGui.reviewCandidates(event.getCandidates());
-                        if (input == event.getCandidates().size() + 1) {
-                            reviewParticipants();
-                            break;
-                        }
-                        int acceptedCandidateIndex = input - 1;
-                        User acceptedCandidate = event.getCandidates().get(acceptedCandidateIndex);
-                        event.acceptCandidate(acceptedCandidate);
-                    } else {
-                        System.out.println("No candidates available");
-                    }
-                    reviewParticipants();
+                    reviewCandidates();
                     break;
                 case 2:
-                    if (!event.getParticipants().isEmpty()) {
-                        int input = organizerGui.designateAnimators(event.getParticipants());
-                        if (input == event.getParticipants().size() + 1) {
-                            reviewParticipants();
-                            break;
-                        }
-                        int designatedAnimatorIndex = input - 1;
-                        User designatedAnimator = event.getParticipants().get(designatedAnimatorIndex);
-                        event.addAnimator(designatedAnimator);
-                    } else {
-                        System.out.println("No participants available");
-                    }
-                    reviewParticipants();
+                    designateAnimators();
                     break;
                 case 3:
                     mainMenu();
@@ -160,7 +168,47 @@ public class OrganizerActions {
                     throw new InvalidActionException("Invalid action chosen");
             }
         } catch (InvalidActionException e) {
-            reviewEventList();
+            reviewParticipants();
         }
+    }
+
+    private void reviewCandidates() {
+        if (!event.getCandidates().isEmpty()) {
+            int input = organizerGui.reviewCandidates(event.getCandidates());
+            if (input < 1 || input > event.getCandidates().size() + 1){
+                reviewCandidates();
+                return;
+            }
+            if (input == event.getCandidates().size() + 1) {
+                reviewParticipants();
+                return;
+            }
+            int acceptedCandidateIndex = input - 1;
+            User acceptedCandidate = event.getCandidates().get(acceptedCandidateIndex);
+            event.acceptCandidate(acceptedCandidate);
+        } else {
+            System.out.println("No candidates available");
+        }
+        reviewParticipants();
+    }
+
+    private void designateAnimators() {
+        if (!event.getParticipants().isEmpty()) {
+            int input = organizerGui.designateAnimators(event.getParticipants());
+            if (input < 1 || input > event.getParticipants().size() + 1){
+                designateAnimators();
+                return;
+            }
+            if (input == event.getParticipants().size() + 1) {
+                reviewParticipants();
+                return;
+            }
+            int designatedAnimatorIndex = input - 1;
+            User designatedAnimator = event.getParticipants().get(designatedAnimatorIndex);
+            event.addAnimator(designatedAnimator);
+        } else {
+            System.out.println("No participants available");
+        }
+        reviewParticipants();
     }
 }

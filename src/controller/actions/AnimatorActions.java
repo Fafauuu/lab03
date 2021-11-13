@@ -87,6 +87,7 @@ public class AnimatorActions {
             for (String equipmentName : event.getEventEquipmentList().getEquipmentDelivery().keySet()) {
                 if (equipmentName.equals(offer.get(1))){
                     event.getEventEquipmentList().acceptEquipmentOffer(equipmentName, Integer.parseInt(offer.get(2)));
+                    event.addComment(animatorGui.addComment());
                 }
             }
         }

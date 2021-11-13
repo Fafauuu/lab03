@@ -14,4 +14,5 @@ public interface ParticipantGui {
     int reportDesireToParticipate(EventsDataBase eventsDataBase);
     void reviewEquipmentList(Event event);
     List<String> reportEquipmentDeliveryProposition(User participant);
+    void readComments(Event event);
 }

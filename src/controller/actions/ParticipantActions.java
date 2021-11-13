@@ -58,9 +58,12 @@ public class ParticipantActions {
                     reportDesireToDeliverEquipment();
                     break;
                 case 5:
-                    startActions();
+                    readComments();
                     break;
                 case 6:
+                    startActions();
+                    break;
+                case 7:
                     System.exit(0);
                     break;
                 default:
@@ -71,6 +74,11 @@ public class ParticipantActions {
         }
     }
 
+    private void readComments() {
+        participantGui.readComments(event);
+        mainMenu();
+    }
+
     public void reviewEventList() {
         participantGui.reviewEventList(eventsDataBase);
         mainMenu();
@@ -78,6 +86,7 @@ public class ParticipantActions {
 
     public void reportDesireToParticipate() {
         int input = participantGui.reportDesireToParticipate(eventsDataBase);
+        if (input < 0 || input > eventsDataBase.getEventList().size() + 1)
         if (input == eventsDataBase.getEventList().size() + 1){
             mainMenu();
             return;

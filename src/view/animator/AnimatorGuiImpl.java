@@ -120,4 +120,11 @@ public class AnimatorGuiImpl implements AnimatorGui{
         Scanner scanner = new Scanner(System.in);
         return scanner.nextInt();
     }
+
+    @Override
+    public String addComment() {
+        System.out.println("ADD COMMENT: ");
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextLine();
+    }
 }

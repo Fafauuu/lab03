@@ -13,4 +13,5 @@ public interface AnimatorGui {
     List<String> addEquipmentDemand();
     void reviewDeliveredEquipment(Event event);
     int reviewDeliveryPropositions(Event event);
+    String addComment();
 }

@@ -19,4 +19,6 @@ public interface OrganizerGui {
     int reviewParticipants();
     int reviewCandidates(List<User> candidates);
     int designateAnimators(List<User> participants);
+    int closeEvent();
+    String addEventSummary();
 }

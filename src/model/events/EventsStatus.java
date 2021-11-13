@@ -1,6 +1,6 @@
 package model.events;
 
-public enum EventsState {
+public enum EventsStatus {
     EDITED,
     SUBMITTED,
     ENDED

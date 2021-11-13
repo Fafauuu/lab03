@@ -12,7 +12,7 @@ public class Event {
     private List<User> candidates;
     private String eventName;
     private EventDescription eventDescription;
-    private EventsState eventsState;
+    private EventsStatus eventsStatus;
     private EventEquipmentList eventEquipmentList;
     private List<String> comments;
 
@@ -22,8 +22,8 @@ public class Event {
         participants = new ArrayList<>();
         animators = new ArrayList<>();
         candidates = new ArrayList<>();
-        comments = new ArrayList<>();
         eventDescription = new EventDescription();
+        eventsStatus = EventsStatus.SUBMITTED;
         eventEquipmentList = new EventEquipmentList();
         comments = new ArrayList<>();
     }
@@ -82,32 +82,20 @@ public class Event {
         return eventDescription;
     }
 
-    public void setEventDescription(EventDescription eventDescription) {
-        this.eventDescription = eventDescription;
-    }
-
-    public EventsState getEventsState() {
-        return eventsState;
-    }
-
-    public void setEventsState(EventsState eventsState) {
-        this.eventsState = eventsState;
+    public void setEventsStatus(EventsStatus eventsStatus) {
+        this.eventsStatus = eventsStatus;
     }
 
     public EventEquipmentList getEventEquipmentList() {
         return eventEquipmentList;
     }
 
-    public void setEventEquipmentList(EventEquipmentList eventEquipmentList) {
-        this.eventEquipmentList = eventEquipmentList;
-    }
-
     public List<String> getComments() {
         return comments;
     }
 
-    public void setComments(List<String> comments) {
-        this.comments = comments;
+    public void addComment(String comment){
+        comments.add(comment);
     }
 
     @Override
@@ -116,9 +104,9 @@ public class Event {
                 + "\nParticipants: " + participants
                 + "\nAnimators: " + animators
                 + "\nDescription: " + eventDescription.getDescription()
+                + "\nStatus: " + eventsStatus
                 + "\nDate: " + eventDescription.getEventDate()
                 + "\nApplication deadline: " + eventDescription.getApplicationsDeadline()
-                + "\nComments: " + comments
                 + "\n";
     }
 }

@@ -59,8 +59,9 @@ public class ParticipantGuiImpl implements ParticipantGui{
         System.out.println("2 - Report desire to participate");
         System.out.println("3 - Review event equipment list");
         System.out.println("4 - Report desire to deliver equipment");
-        System.out.println("5 - Choose different participant");
-        System.out.println("6 - Exit");
+        System.out.println("5 - Read comments");
+        System.out.println("6 - Choose different participant");
+        System.out.println("7 - Exit");
         Scanner scanner = new Scanner(System.in);
         return scanner.nextInt();
     }
@@ -113,5 +114,15 @@ public class ParticipantGuiImpl implements ParticipantGui{
         System.out.print("Amount");
         data.add(scanner.nextLine());
         return data;
+    }
+
+    @Override
+    public void readComments(Event event) {
+        if (event.getComments().isEmpty()){
+            System.out.println("No comments added yet");
+        }
+        for (String comment : event.getComments()) {
+            System.out.println(comment);
+        }
     }
 }
