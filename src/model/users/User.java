@@ -1,21 +1,14 @@
 package model.users;
 
-import model.events.Event;
+import java.util.Objects;
 
-import java.util.Map;
-
-public class User extends Person{
-    private static int count;
-    private final int id;
+public class User{
+    private final String name;
+    private final String surname;
 
     public User(String name, String surname) {
-        super(name, surname);
-        this.id = count;
-        count++;
-    }
-
-    public int getId() {
-        return id;
+        this.name = name;
+        this.surname = surname;
     }
 
     public String getName() {
@@ -26,4 +19,21 @@ public class User extends Person{
         return surname;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(name, user.name) && Objects.equals(surname, user.surname);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, surname);
+    }
+
+    @Override
+    public String toString() {
+        return name + " " + surname;
+    }
 }

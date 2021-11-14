@@ -1,11 +1,13 @@
 package model.events;
 
+import fileHandlers.JsonHandler;
 import model.users.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Event {
+    private final int id;
     private final User organizer;
     private List<User> participants;
     private List<User> animators;
@@ -16,7 +18,8 @@ public class Event {
     private EventEquipmentList eventEquipmentList;
     private List<String> comments;
 
-    public Event(String eventName, User organizer) {
+    public Event(int id, String eventName, User organizer) {
+        this.id = id;
         this.eventName = eventName;
         this.organizer = organizer;
         participants = new ArrayList<>();
@@ -28,16 +31,16 @@ public class Event {
         comments = new ArrayList<>();
     }
 
+    public int getId() {
+        return id;
+    }
+
     public User getOrganizer() {
         return organizer;
     }
 
     public List<User> getParticipants() {
         return participants;
-    }
-
-    public void setParticipants(List<User> participants) {
-        this.participants = participants;
     }
 
     public List<User> getAnimators() {
@@ -47,10 +50,6 @@ public class Event {
     public void addAnimator(User designatedAnimator){
         animators.add(designatedAnimator);
         participants.remove(designatedAnimator);
-    }
-
-    public void setAnimators(List<User> animators) {
-        this.animators = animators;
     }
 
     public List<User> getCandidates() {
@@ -64,10 +63,6 @@ public class Event {
     public void acceptCandidate(User candidate){
         participants.add(candidate);
         candidates.remove(candidate);
-    }
-
-    public void setCandidates(List<User> candidates) {
-        this.candidates = candidates;
     }
 
     public String getEventName() {
@@ -105,6 +100,7 @@ public class Event {
                 + "\nAnimators: " + animators
                 + "\nDescription: " + eventDescription.getDescription()
                 + "\nStatus: " + eventsStatus
+                + "\nPreparation percentage: " + eventEquipmentList.getPreparationPercentage() + "%"
                 + "\nDate: " + eventDescription.getEventDate()
                 + "\nApplication deadline: " + eventDescription.getApplicationsDeadline()
                 + "\n";

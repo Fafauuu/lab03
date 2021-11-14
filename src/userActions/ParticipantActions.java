@@ -1,7 +1,8 @@
-package controller.actions;
+package userActions;
 
 import dataBase.EventsDataBase;
 import exceptions.InvalidActionException;
+import exceptions.UserAlreadyParticipates;
 import model.events.Event;
 import model.users.User;
 import view.participant.ParticipantGui;
@@ -21,8 +22,12 @@ public class ParticipantActions {
     }
 
     public void startActions() {
-        event = chooseEvent();
-        participant = chooseParticipant(event);
+        try {
+            event = chooseEvent();
+            participant = chooseParticipant(event);
+        }catch (UserAlreadyParticipates e){
+            startActions();
+        }
         mainMenu();
     }
 
@@ -30,14 +35,18 @@ public class ParticipantActions {
         Event event = null;
         try {
             event = participantGui.chooseEvent(eventsDataBase);
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             System.out.println("Invalid event\n");
             chooseEvent();
         }
         return event;
     }
 
-    private User chooseParticipant(Event event) {
+    private User chooseParticipant(Event event) throws UserAlreadyParticipates{
+        if (event.getParticipants().isEmpty()){
+            System.out.println("No participants available");
+            throw new UserAlreadyParticipates(participant + " already participates in: " + event.getEventName());
+        }
         return participantGui.chooseParticipant(event);
     }
 
@@ -49,7 +58,12 @@ public class ParticipantActions {
                     reviewEventList();
                     break;
                 case 2:
-                    reportDesireToParticipate();
+                    try {
+                        reportDesireToParticipate();
+                    } catch (UserAlreadyParticipates e) {
+                        System.out.println(e.getMessage());
+                        mainMenu();
+                    }
                     break;
                 case 3:
                     reviewEventEquipmentList();
@@ -84,17 +98,43 @@ public class ParticipantActions {
         mainMenu();
     }
 
-    public void reportDesireToParticipate() {
+    public void reportDesireToParticipate() throws UserAlreadyParticipates {
         int input = participantGui.reportDesireToParticipate(eventsDataBase);
-        if (input < 0 || input > eventsDataBase.getEventList().size() + 1)
-        if (input == eventsDataBase.getEventList().size() + 1){
-            mainMenu();
-            return;
+        if (input > 0 && input <= eventsDataBase.getEventList().size() + 1){
+            if (input == eventsDataBase.getEventList().size() + 1) {
+                mainMenu();
+            }
+            Event eventToParticipate = eventsDataBase.getEventList().get(input - 1);
+            if(userAlreadyParticipates(eventToParticipate)) {
+                throw new UserAlreadyParticipates(participant
+                        + " already participates in: " + eventToParticipate.getEventName());
+            }
+            else {
+                eventToParticipate.addCandidate(participant);
+                eventsDataBase.update(eventToParticipate);
+                mainMenu();
+            }
+        } else {
+            reportDesireToParticipate();
         }
-        if (input <= eventsDataBase.getEventList().size() && input > 0){
-            eventsDataBase.getEventList().get(input-1).addCandidate(participant);
+    }
+
+    private boolean userAlreadyParticipates(Event event) {
+        User organizer = event.getOrganizer();
+        List<User> animatorsList = event.getAnimators();
+        List<User> participantList = event.getParticipants();
+        List<User> candidatesList = event.getCandidates();
+        if (participant.equals(organizer)) return true;
+        for (User user : animatorsList) {
+            if (user.equals(participant)) return true;
         }
-        mainMenu();
+        for (User user : participantList) {
+            if (user.equals(participant)) return true;
+        }
+        for (User user : candidatesList) {
+            if(user.equals(participant)) return true;
+        }
+        return false;
     }
 
     public void reviewEventEquipmentList() {
@@ -106,14 +146,15 @@ public class ParticipantActions {
         List<String> deliveryProposition = participantGui.reportEquipmentDeliveryProposition(participant);
         boolean equipmentFound = false;
         for (String equipmentName : event.getEventEquipmentList().getEquipmentDemand().keySet()) {
-            if (equipmentName.equals(deliveryProposition.get(1))){
+            if (equipmentName.equals(deliveryProposition.get(1))) {
                 event.getEventEquipmentList().addEquipmentOffer(deliveryProposition);
                 equipmentFound = true;
             }
         }
-        if (!equipmentFound){
+        if (!equipmentFound) {
             System.out.println("Invalid equipment name\n");
         }
+        eventsDataBase.update(event);
         mainMenu();
     }
 }

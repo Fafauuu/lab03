@@ -1,4 +1,4 @@
-package controller.actions;
+package userActions;
 
 import dataBase.EventsDataBase;
 import exceptions.InvalidActionException;
@@ -71,6 +71,7 @@ public class AnimatorActions {
     private void addEquipmentDemand() {
         List<String> data = animatorGui.addEquipmentDemand();
         event.getEventEquipmentList().addEquipmentDemand(data.get(0), Integer.parseInt(data.get(1)));
+        eventsDataBase.update(event);
         menu();
     }
 
@@ -91,6 +92,7 @@ public class AnimatorActions {
                 }
             }
         }
+        eventsDataBase.update(event);
         menu();
     }
 }

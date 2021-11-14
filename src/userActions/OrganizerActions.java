@@ -1,8 +1,9 @@
-package controller.actions;
+package userActions;
 
 import dataBase.EventsDataBase;
 import exceptions.EventAlreadyExists;
 import exceptions.InvalidActionException;
+import exceptions.NoSuchEventExistence;
 import model.events.Event;
 import model.events.EventsStatus;
 import model.users.User;
@@ -30,7 +31,14 @@ public class OrganizerActions {
     }
 
     private Event chooseEvent() {
-        return organizerGui.chooseEvent(eventsDataBase);
+        Event eventChosen = organizerGui.chooseEvent(eventsDataBase);
+        try {
+            return eventsDataBase.getEvent(eventChosen);
+        } catch (NoSuchEventExistence e) {
+            e.printStackTrace();
+            startActions();
+            return null;
+        }
     }
 
     private void mainMenu() {
@@ -68,7 +76,8 @@ public class OrganizerActions {
 
     private void createNewEvent() {
         List<String> newEventData = organizerGui.createNewEvent();
-        Event event = new Event(newEventData.get(0), this.organizer);
+        int listSize = eventsDataBase.getEventList().size();
+        Event event = new Event(listSize, newEventData.get(0), this.organizer);
         event.getEventDescription().setDescription(newEventData.get(1));
         event.getEventDescription().setEventDate(LocalDate.parse(newEventData.get(2)));
         event.getEventDescription().setApplicationsDeadline(LocalDate.parse(newEventData.get(3)));
@@ -93,23 +102,27 @@ public class OrganizerActions {
                 case 1:
                     event.setEventName(organizerGui.changeEventName());
                     event.setEventsStatus(EventsStatus.EDITED);
+                    eventsDataBase.update(event);
                     editEvent();
                     break;
                 case 2:
                     event.getEventDescription().setDescription(organizerGui.changeEventDescription());
                     event.setEventsStatus(EventsStatus.EDITED);
+                    eventsDataBase.update(event);
                     editEvent();
                     break;
                 case 3:
                     String date = organizerGui.changeEventDate();
                     event.getEventDescription().setEventDate(LocalDate.parse(date));
                     event.setEventsStatus(EventsStatus.EDITED);
+                    eventsDataBase.update(event);
                     editEvent();
                     break;
                 case 4:
                     String deadline = organizerGui.changeApplicationDeadline();
-                    event.getEventDescription().setEventDate(LocalDate.parse(deadline));
+                    event.getEventDescription().setApplicationsDeadline(LocalDate.parse(deadline));
                     event.setEventsStatus(EventsStatus.EDITED);
+                    eventsDataBase.update(event);
                     editEvent();
                     break;
                 case 5:
@@ -132,6 +145,8 @@ public class OrganizerActions {
                 case 1:
                     addEventSummary();
                     event.setEventsStatus(EventsStatus.ENDED);
+                    eventsDataBase.update(event);
+                    mainMenu();
                     break;
                 case 2:
                     mainMenu();
@@ -147,6 +162,7 @@ public class OrganizerActions {
     private void addEventSummary() {
         String summary = organizerGui.addEventSummary();
         event.addComment(summary);
+        eventsDataBase.update(event);
     }
 
     private void reviewParticipants() {
@@ -186,6 +202,7 @@ public class OrganizerActions {
             int acceptedCandidateIndex = input - 1;
             User acceptedCandidate = event.getCandidates().get(acceptedCandidateIndex);
             event.acceptCandidate(acceptedCandidate);
+            eventsDataBase.update(event);
         } else {
             System.out.println("No candidates available");
         }
@@ -206,6 +223,7 @@ public class OrganizerActions {
             int designatedAnimatorIndex = input - 1;
             User designatedAnimator = event.getParticipants().get(designatedAnimatorIndex);
             event.addAnimator(designatedAnimator);
+            eventsDataBase.update(event);
         } else {
             System.out.println("No participants available");
         }

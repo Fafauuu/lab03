@@ -2,29 +2,32 @@ package dataBase;
 
 import exceptions.EventAlreadyExists;
 import exceptions.NoSuchEventExistence;
+import fileHandlers.JsonHandler;
 import model.events.Event;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class EventsDataBase {
-    private final List<Event> eventList;
+    private List<Event> eventList;
 
     public EventsDataBase() {
-        eventList = new ArrayList<>();
+        eventList = JsonHandler.readEventList();
     }
 
     public List<Event> getEventList() {
+        eventList = JsonHandler.readEventList();
         return eventList;
     }
 
-    public Event getEvent(String eventName) throws NoSuchEventExistence{
-        for (Event event : eventList) {
-            if (event.getEventName().equals(eventName)){
+    public Event getEvent(Event event) throws NoSuchEventExistence{
+        eventList = JsonHandler.readEventList();
+        for (Event eventInDataBase : eventList) {
+            if (eventInDataBase.getEventName().equals(event.getEventName()))
+            {
                 return event;
             }
         }
-        throw new NoSuchEventExistence(eventName + " doesn't exist");
+        throw new NoSuchEventExistence(event.getEventName() + " doesn't exist");
     }
 
     public void addEvent(Event newEvent) throws EventAlreadyExists {
@@ -34,5 +37,17 @@ public class EventsDataBase {
             }
         }
         eventList.add(newEvent);
+        JsonHandler.writeEventList(eventList);
+    }
+
+    public void update(Event event) {
+        int index = 0;
+        for (Event eventOnList : eventList) {
+            if (event.getId() == eventOnList.getId()){
+                eventList.set(index, event);
+            }
+            index++;
+        }
+        JsonHandler.writeEventList(eventList);
     }
 }
